@@ -133,7 +133,7 @@ public class Renderer<E extends Engine> extends Canvas implements Runnable, java
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
-
+        engine.mousePressed(mouseEvent);
     }
 
     @Override

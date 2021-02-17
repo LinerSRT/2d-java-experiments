@@ -15,6 +15,8 @@ public class ImageEntity extends CollidableEntity{
     @Override
     public void render(Graphics2D graphics2D) {
         graphics2D.drawImage(bufferedImage, getLeft(), getTop(), Math.round(getWidth()*scale), Math.round(getHeight()*scale), null);
+        graphics2D.setColor(Color.RED);
+        graphics2D.drawString(getX()+"|"+getY(), getRight(), getBottom());
     }
 
     public void setScale(float scale) {

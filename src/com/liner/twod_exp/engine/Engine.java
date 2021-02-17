@@ -2,6 +2,7 @@ package com.liner.twod_exp.engine;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 public abstract class Engine {
     protected Engine() {
@@ -16,6 +17,8 @@ public abstract class Engine {
     public abstract void tick(double updatesPerSecond);
 
     public abstract void keyPressed(KeyEvent keyEvent);
+
+    public abstract void mousePressed(MouseEvent mouseEvent);
 
     public abstract EngineConfig getConfig();
 }
