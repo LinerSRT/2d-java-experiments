@@ -13,4 +13,8 @@ public interface Location {
     int getBottom();
     int getDistanceTo(Location location);
     int getAngleTo(Location location);
+    void moveTo(int x, int y);
+    void moveBy(int x, int y);
+    void moveUntil(int x, int y);
+    void accelerate(int xVel, int yVel, int friction);
 }

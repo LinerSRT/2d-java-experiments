@@ -1,35 +1,39 @@
 package com.liner.twod_exp.engine;
 
 import java.awt.*;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 
 @SuppressWarnings("unused")
-public abstract class Renderer<E extends Engine> extends Canvas implements Runnable, java.awt.event.KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
+public class Renderer<E extends Engine> extends Canvas implements Runnable, java.awt.event.KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
     private Thread thread;
     private boolean isRunning = false;
     private final int updatesPerSecond;
     private final int framesPerSecond;
     private int FPS = 0;
     private int UPS = 0;
-    private E engine;
+    private int width;
+    private int height;
+    private final E engine;
 
     public Renderer(E engine) {
         this.updatesPerSecond = engine.getConfig().getTicksPerSecond();
         this.framesPerSecond = engine.getConfig().getFramesPerSecond();
+        this.width = engine.getConfig().getScreenWidth();
+        this.height = engine.getConfig().getScreenHeight();
+        this.engine = engine;
         addKeyListener(this);
         addMouseListener(this);
         addMouseWheelListener(this);
         addMouseMotionListener(this);
         new Window<>(
-                engine.getConfig().getScreenWidth(),
-                engine.getConfig().getScreenHeight(),
+                width,
+                height,
                 engine.getConfig().getName(),
                 "liner.png",
                 this
         );
+        start();
         requestFocus();
     }
 
@@ -49,7 +53,7 @@ public abstract class Renderer<E extends Engine> extends Canvas implements Runna
             deltaF += (currentTime - initialTime) / timeF;
             initialTime = currentTime;
             if (deltaU >= 1) {
-                engine.tick(deltaU);
+                engine.tick(getUPS());
                 tUPS++;
                 deltaU--;
             }
@@ -61,8 +65,8 @@ public abstract class Renderer<E extends Engine> extends Canvas implements Runna
                 }
                 Graphics2D graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
                 graphics2D.setColor(Color.BLACK);
-                graphics2D.fillRect(0, 0, getWidth(), getHeight());
-                engine.draw(graphics2D);
+                graphics2D.fillRect(0, 0, width, height);
+                engine.render(graphics2D);
                 graphics2D.dispose();
                 bufferStrategy.show();
                 tFPS++;
@@ -105,5 +109,60 @@ public abstract class Renderer<E extends Engine> extends Canvas implements Runna
 
     public int getUPS() {
         return UPS;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        engine.keyPressed(keyEvent);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
+
     }
 }
