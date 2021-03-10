@@ -1,31 +1,27 @@
 package com.liner.twod_exp.engine;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferStrategy;
+import java.util.stream.IntStream;
 
 @SuppressWarnings("unused")
-public class Renderer<E extends Engine> extends Canvas implements Runnable, java.awt.event.KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
+public class Renderer<E extends Engine> extends Canvas implements Runnable {
     private Thread thread;
+    private E engine;
     private boolean isRunning = false;
     private final int updatesPerSecond;
     private final int framesPerSecond;
     private int FPS = 0;
     private int UPS = 0;
-    private int width;
-    private int height;
-    private final E engine;
+    private final int width;
+    private final int height;
 
     public Renderer(E engine) {
+        this.engine = engine;
         this.updatesPerSecond = engine.getConfig().getTicksPerSecond();
         this.framesPerSecond = engine.getConfig().getFramesPerSecond();
         this.width = engine.getConfig().getScreenWidth();
         this.height = engine.getConfig().getScreenHeight();
-        this.engine = engine;
-        addKeyListener(this);
-        addMouseListener(this);
-        addMouseWheelListener(this);
-        addMouseMotionListener(this);
         new Window<>(
                 width,
                 height,
@@ -53,7 +49,8 @@ public class Renderer<E extends Engine> extends Canvas implements Runnable, java
             deltaF += (currentTime - initialTime) / timeF;
             initialTime = currentTime;
             if (deltaU >= 1) {
-                engine.tick(getUPS());
+                engine.update();
+                IntStream.range(0, engine.getRenderableStack().size()).forEachOrdered(i -> engine.getRenderableStack().get(i).update(getUPS()));
                 tUPS++;
                 deltaU--;
             }
@@ -64,9 +61,14 @@ public class Renderer<E extends Engine> extends Canvas implements Runnable, java
                     return;
                 }
                 Graphics2D graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
+                graphics2D.setRenderingHint(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON
+                );
                 graphics2D.setColor(Color.BLACK);
                 graphics2D.fillRect(0, 0, width, height);
-                engine.render(graphics2D);
+                engine.draw(graphics2D);
+                IntStream.range(0, engine.getRenderableStack().size()).forEachOrdered(i -> engine.getRenderableStack().get(i).draw(graphics2D, engine.getConfig().getScreenHeight(), engine.getConfig().getScreenWidth()));
                 graphics2D.dispose();
                 bufferStrategy.show();
                 tFPS++;
@@ -109,60 +111,5 @@ public class Renderer<E extends Engine> extends Canvas implements Runnable, java
 
     public int getUPS() {
         return UPS;
-    }
-
-    @Override
-    public void keyTyped(KeyEvent keyEvent) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent keyEvent) {
-        engine.keyPressed(keyEvent);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent keyEvent) {
-
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent mouseEvent) {
-        engine.mousePressed(mouseEvent);
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-
     }
 }

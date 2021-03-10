@@ -11,8 +11,9 @@ public class Window<E extends Engine> extends Canvas {
         if (icon != null)
             frame.setIconImage(new ImageIcon(System.getProperty("user.dir") + "/res/" + icon).getImage());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(width, height);
+        frame.setLocation((int)(dimension.getWidth()/2-frame.getWidth()/2), (int)(dimension.getHeight()/2-frame.getHeight()/2));
         frame.setResizable(false);
         frame.add(renderer);
         frame.setVisible(true);
