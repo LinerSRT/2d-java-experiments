@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Shape {
-    private final List<Line> lines = new ArrayList<>();
+    private final List<Node> nodes = new ArrayList<>();
     private List<Vector2> vertices;
 
     public Shape(List<Vector2> points) {
@@ -18,8 +18,12 @@ public class Shape {
         this(Arrays.asList(points));
     }
 
-    public List<Line> getLines() {
-        return lines;
+    public Shape(Shape shape){
+        this(shape.getVertices());
+    }
+
+    public List<Node> getLines() {
+        return nodes;
     }
 
     public List<Vector2> getVertices() {
@@ -29,8 +33,12 @@ public class Shape {
     public void setVertices(List<Vector2> vertices) {
         this.vertices = vertices;
         for (int i = 0; i < vertices.size() - 1; i++)
-            lines.add(new Line(vertices.get(i), vertices.get(i + 1)));
-        lines.add(new Line(vertices.get(vertices.size() - 1), vertices.get(0)));
+            nodes.add(new Node(vertices.get(i), vertices.get(i + 1)));
+        nodes.add(new Node(vertices.get(vertices.size() - 1), vertices.get(0)));
+    }
+
+    public void setVertices(Vector2... vertices){
+        setVertices(Arrays.asList(vertices));
     }
 
     public Path2D getPath() {

@@ -8,6 +8,7 @@ public abstract class Engine implements IRender, KeyListener, MouseListener, Mou
     private final Renderer<Engine> renderer;
     protected LinkedList<Renderable> renderableStack;
 
+
     protected Engine() {
         this.renderableStack = new LinkedList<>();
         setup();
@@ -20,11 +21,11 @@ public abstract class Engine implements IRender, KeyListener, MouseListener, Mou
 
     public abstract void setup();
 
-    public void draw(Graphics2D graphics2D){
+    public void draw(Graphics2D graphics2D) {
 
     }
 
-    public void update(){
+    public void update() {
 
     }
 
@@ -42,12 +43,12 @@ public abstract class Engine implements IRender, KeyListener, MouseListener, Mou
         this.renderableStack.remove(renderable);
     }
 
-    public void setRenderablesStack(LinkedList<Renderable> renderablesStack){
+    public void setRenderablesStack(LinkedList<Renderable> renderablesStack) {
         this.renderableStack.clear();
         addRenderableStack(renderablesStack);
     }
 
-    public void addRenderableStack(LinkedList<Renderable> renderablesStack){
+    public void addRenderableStack(LinkedList<Renderable> renderablesStack) {
         this.renderableStack.addAll(renderablesStack);
     }
 
@@ -55,23 +56,6 @@ public abstract class Engine implements IRender, KeyListener, MouseListener, Mou
     public LinkedList<Renderable> getRenderableStack() {
         return renderableStack;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Override

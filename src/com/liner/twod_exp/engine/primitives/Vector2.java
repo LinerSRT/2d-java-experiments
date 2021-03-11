@@ -11,6 +11,7 @@ public class Vector2 {
     public Vector2(double x) {
         this(x, 0);
     }
+
     public Vector2(Vector2 vector2) {
         this(vector2.getX(), vector2.getY());
     }
@@ -128,7 +129,7 @@ public class Vector2 {
         return this.x * v.x + this.y * v.y;
     }
 
-    public Vector2 copy(){
+    public Vector2 copy() {
         return new Vector2(this);
     }
 

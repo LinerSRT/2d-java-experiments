@@ -3,22 +3,24 @@ package com.liner.twod_exp.engine;
 import javax.swing.*;
 import java.awt.*;
 
-public class Window<E extends Engine> extends Canvas {
+public class Window extends Canvas {
     public JFrame frame;
 
-    public Window(int width, int height, String name, String icon, Renderer<E> renderer) {
+    public Window(int width, int height, String name, String icon, Renderer renderer) {
         frame = new JFrame(name);
         if (icon != null)
             frame.setIconImage(new ImageIcon(System.getProperty("user.dir") + "/res/" + icon).getImage());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(width, height);
-        frame.setLocation((int)(dimension.getWidth()/2-frame.getWidth()/2), (int)(dimension.getHeight()/2-frame.getHeight()/2));
+        frame.setLocation((int) (dimension.getWidth() / 2 - frame.getWidth() / 2), (int) (dimension.getHeight() / 2 - frame.getHeight() / 2));
         frame.setResizable(false);
         frame.add(renderer);
         frame.setVisible(true);
         renderer.start();
     }
+
+
 
     public void setSize(int width, int height) {
         frame.setSize(
@@ -27,4 +29,8 @@ public class Window<E extends Engine> extends Canvas {
         );
     }
 
+
+    public JFrame getFrame() {
+        return frame;
+    }
 }

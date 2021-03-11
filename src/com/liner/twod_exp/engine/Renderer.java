@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 @SuppressWarnings("unused")
 public class Renderer<E extends Engine> extends Canvas implements Runnable {
     private Thread thread;
+    private Window window;
     private E engine;
     private boolean isRunning = false;
     private final int updatesPerSecond;
@@ -22,7 +23,7 @@ public class Renderer<E extends Engine> extends Canvas implements Runnable {
         this.framesPerSecond = engine.getConfig().getFramesPerSecond();
         this.width = engine.getConfig().getScreenWidth();
         this.height = engine.getConfig().getScreenHeight();
-        new Window<>(
+        window = new Window(
                 width,
                 height,
                 engine.getConfig().getName(),
@@ -31,6 +32,10 @@ public class Renderer<E extends Engine> extends Canvas implements Runnable {
         );
         start();
         requestFocus();
+    }
+
+    public Window getWindow() {
+        return window;
     }
 
     @Override
@@ -61,14 +66,13 @@ public class Renderer<E extends Engine> extends Canvas implements Runnable {
                     return;
                 }
                 Graphics2D graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
-                graphics2D.setRenderingHint(
-                        RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON
-                );
+                graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 graphics2D.setColor(Color.BLACK);
                 graphics2D.fillRect(0, 0, width, height);
                 engine.draw(graphics2D);
                 IntStream.range(0, engine.getRenderableStack().size()).forEachOrdered(i -> engine.getRenderableStack().get(i).draw(graphics2D, engine.getConfig().getScreenHeight(), engine.getConfig().getScreenWidth()));
+
                 graphics2D.dispose();
                 bufferStrategy.show();
                 tFPS++;
