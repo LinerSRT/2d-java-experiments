@@ -1,4 +1,4 @@
-package com.liner.twod_exp.engine.primitives;
+package com.liner.twod_exp.engine.math;
 
 import com.sun.istack.internal.Nullable;
 
@@ -48,6 +48,10 @@ public class Node {
         if (Math.abs(angle) == 90)
             return -angle;
         return rotation;
+    }
+
+    public double getLength(){
+        return point1.distance(point2);
     }
 
     public Vector2 getPoint1() {

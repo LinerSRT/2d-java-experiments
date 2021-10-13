@@ -1,4 +1,4 @@
-package com.liner.twod_exp.engine.primitives;
+package com.liner.twod_exp.engine.math;
 
 public class Vector2 {
     public double x;
@@ -131,6 +131,10 @@ public class Vector2 {
 
     public Vector2 copy() {
         return new Vector2(this);
+    }
+
+    public boolean isZero() {
+        return x == 0 && y == 0;
     }
 
     @Override
