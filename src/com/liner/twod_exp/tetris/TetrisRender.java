@@ -41,7 +41,7 @@ public class TetrisRender extends Renderer {
         if (System.currentTimeMillis() - timer > 500) {
             boolean allShapesCantMove = false;
             for (Shape shape : shapeList) {
-                if (shape.canMoveDown()) {
+                if (shape.canMoveDown(shapeList)) {
                     allShapesCantMove = true;
                     shape.moveDown(shapeList);
                 }
@@ -58,11 +58,11 @@ public class TetrisRender extends Renderer {
             if (keyCode == KeyEvent.VK_S)
                 shape.moveDown(shapeList);
             if (keyCode == KeyEvent.VK_A)
-                if (shape.canMoveDown())
-                    shape.moveLeft();
+                if (shape.canMoveDown(shapeList))
+                    shape.moveLeft(shapeList);
             if (keyCode == KeyEvent.VK_D)
-                if (shape.canMoveDown())
-                    shape.moveRight();
+                if (shape.canMoveDown(shapeList))
+                    shape.moveRight(shapeList);
         }
     }
 }

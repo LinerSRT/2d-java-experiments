@@ -149,49 +149,41 @@ public class Shape {
 
 
     public boolean canMoveDown(List<Shape> shapes) {
-        for (Block block : blockList)
-            if (block.getY() + 1 >= cellsHeight)
+            Block bottom = getBottom();
+            if(bottom.getY() + 1 >= cellsHeight)
                 return false;
-        if (shapes.size() == 1)
-            return true;
+            for(Shape shape:shapes){
+                Block top = shape.getTop();
+                if(bottom.getY() + 1 == top.getY())
+                    return false;
+            }
+        return true;
+    }
 
-        List<Block> allBlocks = new ArrayList<>();
-        shapes.forEach(shape -> {
-            if(shape != Shape.this){
-                allBlocks.addAll(shape.getBlockList());
-            }
-        });
-        Shape copy = new Shape(this);
-        copy.moveDownF();
-        for (Block otherBlock : allBlocks) {
-            for (Block block : copy.getBlockList()) {
-                if (block.getY() == otherBlock.getY() && block.getX() == otherBlock.getX())
-                    return true;
-            }
+    public boolean canMoveRight(List<Shape> shapes) {
+        Block right = getLeft();
+        if(right.getX() + 1 >= cellsWidth)
+            return false;
+        for(Shape shape:shapes){
+            Block left = shape.getTop();
+            if(right.getX() + 1 == left.getX())
+                return false;
+        }
+        return true;
+    }
+    public boolean canMoveLeft(List<Shape> shapes) {
+        Block left = getLeft();
+        if(left.getX() - 1 <= 0)
+            return false;
+        for(Shape shape:shapes){
+            Block right = shape.getTop();
+            if(left.getX() - 1 == right.getX())
+                return false;
         }
         return true;
     }
 
-    public boolean canMoveDown() {
-        for (Block block : blockList)
-            if (block.getY() + 1 >= cellsHeight)
-                return false;
-        return true;
-    }
 
-    public boolean canMoveLeft() {
-        for (Block block : blockList)
-            if (block.getX() - 1 < 0)
-                return false;
-        return true;
-    }
-
-    public boolean canMoveRight() {
-        for (Block block : blockList)
-            if (block.getX() + 1 >= cellsWidth)
-                return false;
-        return true;
-    }
 
     public void moveDown(List<Shape> shapes) {
         if (!canMoveDown(shapes))
@@ -200,22 +192,55 @@ public class Shape {
             block.moveDown();
     }
 
-    public void moveDownF() {
-        for (Block block : blockList)
-            block.moveDown();
-    }
-
-    public void moveLeft() {
-        if (!canMoveLeft())
+    public void moveLeft(List<Shape> shapes) {
+        if (!canMoveLeft(shapes))
             return;
         for (Block block : blockList)
             block.moveLeft();
     }
 
-    public void moveRight() {
-        if (!canMoveRight())
+    public void moveRight(List<Shape> shapes) {
+        if (!canMoveRight(shapes))
             return;
         for (Block block : blockList)
             block.moveRight();
+    }
+
+    private Block getLeft(){
+        Block left = null;
+        for(Block block:blockList){
+            if(left == null || block.getX() < left.getX()){
+                left = block;
+            }
+        }
+        return left;
+    }
+
+    private Block getRight(){
+        Block right = null;
+        for(Block block:blockList){
+            if(right == null || block.getX() > right.getX()){
+                right = block;
+            }
+        }
+        return right;
+    }
+    private Block getBottom(){
+        Block bottom = null;
+        for(Block block:blockList){
+            if(bottom == null || block.getY() > bottom.getY()){
+                bottom = block;
+            }
+        }
+        return bottom;
+    }
+    private Block getTop(){
+        Block bottom = null;
+        for(Block block:blockList){
+            if(bottom == null || block.getY() < bottom.getY()){
+                bottom = block;
+            }
+        }
+        return bottom;
     }
 }
