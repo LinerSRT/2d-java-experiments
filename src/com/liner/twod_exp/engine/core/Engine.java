@@ -19,6 +19,7 @@ public class Engine implements Runnable {
     private final Canvas canvas;
     private BufferStrategy bufferStrategy;
     private Graphics2D graphics2D;
+    private BufferedImage bufferedImage;
     private int frameRate;
     private int tickRate;
     private int windowWidth;
@@ -36,6 +37,7 @@ public class Engine implements Runnable {
     private Engine(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
+        this.bufferedImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_ARGB);
         this.renderers = new LinkedList<>();
         this.canvas = new Canvas();
         window = new JFrame("2D Engine");
@@ -151,6 +153,10 @@ public class Engine implements Runnable {
         return engine.windowWidth;
     }
 
+    public static void setScale(float scale){
+        engine.ECore.scale(scale);
+    }
+
     @Override
     public void run() {
         long initialTime = System.nanoTime();
@@ -173,7 +179,7 @@ public class Engine implements Runnable {
             }
             if (deltaF >= 1) {
                 if (currentRenderer != null && ECore != null) {
-                    ECore.setColor(new Color(0x232323));
+                    ECore.setColor(new Color(0, 0, 0, 218));
                     ECore.fillRect(0, 0, ECore.getWidth(), ECore.getHeight());
                     currentRenderer.render(ECore);
                     bufferStrategy.show();
@@ -181,13 +187,13 @@ public class Engine implements Runnable {
                 tFPS++;
                 deltaF--;
             }
-            if (System.currentTimeMillis() - timer > 1000) {
+            if (System.currentTimeMillis() - timer > 500) {
                 frameRate = tFPS;
                 frameRate = tUPS;
-                window.setTitle(windowName + " | " + tFPS + " FPS");
+                window.setTitle(windowName + " | " + (tFPS * 2) + " FPS");
                 tFPS = 0;
                 tUPS = 0;
-                timer += 1000;
+                timer += 500;
             }
             engine.frameTime = System.nanoTime() - currentTime;
         }

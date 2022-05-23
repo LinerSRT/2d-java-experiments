@@ -3,7 +3,6 @@ package com.liner.twod_exp.raycasting;
 import com.liner.twod_exp.engine.core.ECore;
 import com.liner.twod_exp.engine.math.Node;
 import com.liner.twod_exp.engine.math.Vector2;
-import com.sun.istack.internal.Nullable;
 
 import java.awt.*;
 import java.util.List;
@@ -30,7 +29,6 @@ public class Ray extends Node {
         this.color = Color.WHITE;
     }
 
-    @Nullable
     public Vector2 intersection(List<Line> lineList, double length) {
         Vector2 closest = null;
         for (Line line : lineList) {

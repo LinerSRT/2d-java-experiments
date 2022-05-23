@@ -1,11 +1,10 @@
 package com.liner.twod_exp.engine.math;
 
-import com.sun.istack.internal.Nullable;
 
 import java.awt.geom.Line2D;
 
 public class Node {
-    private Vector2 point1, point2;
+    public Vector2 point1, point2;
 
     public Node(Vector2 point1, Vector2 point2) {
         this.point1 = point1;
@@ -24,7 +23,6 @@ public class Node {
         rotateLine(point1, angle, offset, length);
     }
 
-    @Nullable
     public Vector2 intersects(Node toCheck) {
         Vector2 intersection = null;
         double r_x = point2.x - point1.x;
@@ -76,6 +74,13 @@ public class Node {
 
     public Line2D.Double getPath(){
         return new Line2D.Double(point1.x, point1.y, point2.x, point2.y);
+    }
+    public Line2D.Double getScaledPath(int scaleFactor){
+        return new Line2D.Double(scaleFactor*point1.x, scaleFactor*point1.y,scaleFactor* point2.x, scaleFactor*point2.y);
+    }
+
+    public static Node getScaled(int scaleFactor, Node node){
+        return new Node(scaleFactor*node.point1.x, scaleFactor*node.point1.y,scaleFactor* node.point2.x, scaleFactor*node.point2.y);
     }
 
     public void rotateLine(Vector2 origin, double angle, double offset, double length) {

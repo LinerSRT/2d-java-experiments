@@ -1,0 +1,109 @@
+0@0@MapS1,6,22,40
+#0@0@MapT1,18,16,40
+1@0@MapT1,18,34,40
+2@0@MapS1,6,1,43
+3@0@MapP1,23,22,41
+4@0@MapT1,1,16,42
+5@0@MapW1,1,12,42
+6@0@MapT1,34,16,41
+7@0@MapN1,6,24,40
+8@0@MapT1,18,1,43
+9@0@MapT2,17,17,41
+10@0@MapT1,32,31,42
+11@0@MapT1,14,6,41
+12@0@MapT2,1,1,41
+13@0@MapT3,10,9,41
+14@0@MapT1,7,6,42
+15@0@MapT1,2,1,42
+16@0@MapT3,2,1,41
+17@0@MapW2,6,24,40
+18@0@MapW1,18,1,43
+19@0@MapN2,6,24,40
+20@0@MapN1,6,1,43
+21@0@MapD1,10,11,41
+22@0@MapN2,10,1,41
+23@0@MapD2,10,1,41
+24@0@MapD1,2,1,42
+25@0@MapD3,12,10,41
+26@0@MapD2,5,6,43
+27@0@MapD4,6,11,40
+28@1@South Valley: Nothing valuable here
+29@1@Midpot: The great city
+30@1@Keep Out: Private garden
+31@1@West Desert: Sun Temple goes west.
+32@1@North Hills: Dangers ahead!
+33@1@Beware of monsters!
+34@2@100
+35@2@200
+36@2@300
+37@2@3000
+38@3@006
+39@3@007
+40@3@008
+41@3@009
+42@3@010
+43@3@301
+44@3@302
+45@3@303
+46@3@304
+47@3@107
+48@3@108
+49@3@109
+50@3@207
+51@3@208
+52@3@209
+53@3@101
+54@3@201
+55@3@001
+56@3@002
+57@4
+58@5
+59@6
+60@7@0
+61@7@1
+62@7@2
+63@7@3
+64@7@4
+65@7@5
+66@7@6
+67@7@7
+68@7@8
+69@7@9
+70@7@10
+71@7@11
+72@7@12
+73@7@13
+74@7@14
+75@1@Be Quiet!
+76@1@Shiva Ring will increase the power of ice spells.
+77@1@Ifrit Ring will increase the power of fire spells.
+78@1@Titan Ring will increase the defense power.
+79@1@Odin Ring will increase the attack power.
+80@8
+81@1@Please help me restore peace to this land.
+82@1@Ever since King Lionel vanished, Midpot is the only safe village in the kingdom.
+83@1@Princess Sarah was kidnapped last month. Someone saw her fight with King Lionel. This rumor is too insane...
+84@1@The Royal Family owns five powerful rings, and Princess Sarah wears the most powerful one - The Phoenix Ring!
+85@1@This world isn't truly real. Sometimes a tree isn't a tree.
+86@1@According to the legend, there are ancient ruins among the northern mountains.
+87@1@The queen is recruiting some brave people to fight the monsters. Well, I am just too drunk to do that!
+88@1@This is the entry to the town sewers. There are some treasures, but lots of monsters inside.
+89@1@LOG 1: \n 8/7/2037 10:30 \n High Frequency Space Portal test starts. System OK.
+90@1@LOG 2: \n 8/7/2037 10:42 \n Max. speed of proton accelerator. Object transfer starts. System OK.
+91@1@LOG 3: \n 8/7/2037 10:43 \n Radiation of accelerator seems too high. Cooling process starting.
+92@1@LOG 4: \n 8/7/2037 10:44 \n Cooling process fails. Radiation too high. Shutdown Systems. All personnel evacuate now...
+93@1@LOG 5: \n 8/7/2037 10:45 \n System has been shutdown, press Ctrl-Alt-Del keys to restart the system...
+94@1@LOG 6: \n 6/2/5417 08:13 \n System restarting... New system administrator : Lionel
+95@9
+96@3@305
+97@10
+98@11
+99@12
+100@13
+101@0@MapN1,2,24,40
+102@0@MapT1,14,1,43
+103@14
+104@15
+105@16@Shallow Water ... It seems safe to pass.
+106@17@These are ... computers! Some of them seem to still be working ...
+107@1@The water is too deep to cross.

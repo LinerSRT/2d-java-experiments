@@ -1,8 +1,12 @@
 package com.liner.twod_exp.engine.core;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public interface IRender {
+
+    void draw(BufferedImage bufferedImage);
+    void draw(BufferedImage bufferedImage, int x, int y);
 
     void drawShape(Shape shape);
 

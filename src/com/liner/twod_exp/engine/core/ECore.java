@@ -6,9 +6,8 @@ import java.awt.event.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class ECore implements IRender, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
@@ -48,6 +47,16 @@ public class ECore implements IRender, KeyListener, MouseListener, MouseMotionLi
         inputListeners.add(inputListener);
     }
 
+
+    @Override
+    public void draw(BufferedImage bufferedImage) {
+        graphics2D.drawImage(bufferedImage, 0, 0, null);
+    }
+
+    @Override
+    public void draw(BufferedImage bufferedImage, int x, int y) {
+        graphics2D.drawImage(bufferedImage, x, y, null);
+    }
 
     @Override
     public void drawShape(Shape shape) {
@@ -146,6 +155,40 @@ public class ECore implements IRender, KeyListener, MouseListener, MouseMotionLi
         graphics2D.drawString(string, x, y);
     }
 
+    public void drawString(String text, Rectangle2D.Double rect) {
+        FontMetrics metrics = graphics2D.getFontMetrics(graphics2D.getFont());
+        Rectangle2D stringBounds = getTextBounds(text);
+        if (stringBounds.getWidth() > rect.getWidth()) {
+            int y = (int) rect.y;
+            String[] words = text.split(" ");
+            StringBuilder currentLine = new StringBuilder(words[0]);
+            for (int i = 1; i < words.length; i++) {
+                if (metrics.stringWidth(currentLine + words[i]) < rect.getWidth()) {
+                    currentLine.append(" ").append(words[i]);
+                } else {
+                    graphics2D.drawString(currentLine.toString(), (int) rect.x, y);
+                    y += metrics.getHeight();
+                    currentLine = new StringBuilder(words[i]);
+                }
+            }
+            if (currentLine.toString().trim().length() > 0) {
+                graphics2D.drawString(currentLine.toString(), (int) rect.x, y);
+            }
+        } else {
+            int x = (int) (rect.x + (rect.width - metrics.stringWidth(text)) / 2);
+            int y = (int) (rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent());
+            graphics2D.drawString(text, (int) rect.x, (int) rect.y);
+        }
+
+    }
+
+
+    public void drawCenterVerticalString(String text, Rectangle2D.Double rect) {
+        FontMetrics metrics = graphics2D.getFontMetrics(graphics2D.getFont());
+        int y = (int) (rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent());
+        graphics2D.drawString(text, (int) rect.x, y);
+    }
+
     @Override
     public void setColor(Color color) {
         graphics2D.setColor(color);
@@ -242,8 +285,8 @@ public class ECore implements IRender, KeyListener, MouseListener, MouseMotionLi
         return bounds;
     }
 
-    public Rectangle2D getTextBounds(String text){
-        return graphics2D.getFont().getStringBounds(text, new FontRenderContext(transform,true,true));
+    public Rectangle2D getTextBounds(String text) {
+        return graphics2D.getFont().getStringBounds(text, new FontRenderContext(transform, true, true));
     }
 
     @Override

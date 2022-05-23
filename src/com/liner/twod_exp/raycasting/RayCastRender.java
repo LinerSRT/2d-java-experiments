@@ -89,19 +89,23 @@ public class RayCastRender extends Renderer implements InputListener {
     }
 
     private Robot robot;
-
+    private double lastPosition = 0;
     @Override
     public void mouseMove(ECore eCore, double x, double y) {
         double centerX = 500d / 2;
-        if(robot != null){
-            robot.mouseMove((int)eCore.getWidth()/2, (int)eCore.getHeight() / 2);
+        if(lastPosition != x){
+            double diff = x - lastPosition;
+            lastPosition = x;
+            rayCast.setAngle(rayCast.getAngle()+diff);
         }
-        double offset = x - centerX;
-        if(offset < 0){
-            rayCast.setAngle(rayCast.getAngle()-1);
-        } else if(offset > 0){
-            rayCast.setAngle(rayCast.getAngle()+1);
-        }
+        //if(robot != null){
+        //    robot.mouseMove((int)eCore.getWidth()/2, (int)eCore.getHeight() / 2);
+        //}
+        //if(offset < 0){
+        //    rayCast.setAngle(rayCast.getAngle()-1);
+        //} else if(offset > 0){
+        //    rayCast.setAngle(rayCast.getAngle()+1);
+        //}
     }
 
     @Override
