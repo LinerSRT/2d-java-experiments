@@ -24,44 +24,59 @@ public class Engine implements Runnable {
     private int tickRate;
     private int windowWidth;
     private int windowHeight;
+    private float windowScale;
     private long frameTime;
     private boolean isRendering;
     private String windowName;
 
+    public static JFrame getWindow(){
+        return engine.window;
+    }
+
     public static Engine init(int windowWidth, int windowHeight) {
+        return init(windowWidth, windowHeight, 1);
+    }
+
+    public static Engine init(int windowWidth, int windowHeight, float windowScale) {
         if (engine == null)
-            return engine = new Engine(windowWidth, windowHeight);
+            return engine = new Engine(windowWidth, windowHeight, windowScale);
         return engine;
     }
 
-    private Engine(int windowWidth, int windowHeight) {
-        this.windowWidth = windowWidth;
-        this.windowHeight = windowHeight;
+    private Engine(int windowWidth, int windowHeight, float windowScale) {
         this.bufferedImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_ARGB);
         this.renderers = new LinkedList<>();
         this.canvas = new Canvas();
         window = new JFrame("2D Engine");
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        this.windowWidth = (int) ((windowWidth  + (window.getInsets().left + window.getInsets().right) + 1)*windowScale);
+        this.windowHeight = (int) ((windowHeight  + (window.getInsets().top + window.getInsets().bottom)+ 24)*windowScale);
         window.setSize(
-                windowWidth + (window.getInsets().left + window.getInsets().right) + 7,
-                windowHeight + (window.getInsets().top + window.getInsets().bottom) + 30
+                this.windowWidth,
+                this.windowHeight
         );
-        window.setLocation((int) (dimension.getWidth() / 2 - window.getWidth() / 2), (int) (dimension.getHeight() / 2 - window.getHeight() / 2));
+        canvas.setSize(
+                this.windowWidth,
+                this.windowHeight
+        );
+        window.setLocation((int) (dimension.getWidth() / 2 - window.getWidth() / 2), (int) (dimension.getHeight() / 2 - window.getHeight()) / 2);
         window.setResizable(false);
         window.add(canvas);
-        this.frameRate = 10000;
-        this.tickRate = 60;
-        this.isRendering = false;
+        frameRate = 10000;
+        tickRate = 60;
+        isRendering = false;
     }
 
     public static void register(Renderer renderer) {
         if (!engine.renderers.contains(renderer)) {
+            renderer.setCore(engine.ECore);
             engine.renderers.add(renderer);
         }
     }
 
     public static void unregister(Renderer renderer) {
+        renderer.setCore(null);
         engine.renderers.remove(renderer);
     }
 
@@ -70,6 +85,7 @@ public class Engine implements Runnable {
         for (Renderer renderer : engine.renderers) {
             if (renderer.getIdentifier().equals(identifier)) {
                 target = renderer;
+                break;
             }
         }
         if (target != null)
@@ -82,6 +98,7 @@ public class Engine implements Runnable {
         for (Renderer r : engine.renderers) {
             if (r.getIdentifier().equals(renderer.getIdentifier())) {
                 target = renderer;
+                break;
             }
         }
         if (target != null)
@@ -157,6 +174,11 @@ public class Engine implements Runnable {
         engine.ECore.scale(scale);
     }
 
+    public static void setLocation(int x, int y){
+        engine.window.setLocation(x, y);
+
+    }
+
     @Override
     public void run() {
         long initialTime = System.nanoTime();
@@ -173,6 +195,7 @@ public class Engine implements Runnable {
             initialTime = currentTime;
             if (deltaU >= 1) {
                 if (currentRenderer != null && ECore != null)
+                    ECore.addListener(currentRenderer);
                     currentRenderer.tick(ECore, engine.frameTime);
                 tUPS++;
                 deltaU--;
@@ -195,7 +218,7 @@ public class Engine implements Runnable {
                 tUPS = 0;
                 timer += 500;
             }
-            engine.frameTime = System.nanoTime() - currentTime;
+            engine.frameTime = currentTime;
         }
     }
 }

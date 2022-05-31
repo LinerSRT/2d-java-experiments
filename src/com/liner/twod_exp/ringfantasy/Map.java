@@ -1,9 +1,15 @@
 package com.liner.twod_exp.ringfantasy;
 
+import com.liner.twod_exp.engine.math.Node;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.liner.twod_exp.ringfantasy.RingRender.tileSize;
+
 public class Map {
+    public double cellSize = 16;
     private String mapName;
     private final int mapWidth;
     private final int mapHeight;
@@ -37,21 +43,7 @@ public class Map {
 
 
     public static Tile getTile(int mapData, int x, int y) {
-        int tileID = mapData % 100;
-        Tile tile = new Tile(Resource.tilesImages[tileID], x, y);
-        int objectID = mapData % 10000 / 100;
-        int eventID = mapData % 1000000 / 100000;
-
-        if (objectID != 0) {
-            if(eventID == 6 || eventID == 7){
-
-                int monsterIndex = Resource.getInt(Resource.eventList.get(mapData / 10000).data, 1);
-                tile.objectImage = Resource.monsterImages[monsterIndex];
-            } else {
-                tile.objectImage = Resource.objectImages[objectID];
-            }
-        }
-        return tile;
+        return new Tile(x, y, mapData);
     }
 
     public Tile getTile(int x, int y) {
@@ -93,10 +85,10 @@ public class Map {
     public int getData(Player player) {
         int data = 0;
         switch (player.direction) {
-            case 0 -> data = mapData[player.y-1][player.x];
-            case 1 -> data = mapData[player.y][player.x-1];
-            case 2 -> data = mapData[player.y][player.x+1];
-            case 3 -> data = mapData[player.y+1][player.x];
+            case 0 -> data = mapData[player.y - 1][player.x];
+            case 1 -> data = mapData[player.y][player.x - 1];
+            case 2 -> data = mapData[player.y][player.x + 1];
+            case 3 -> data = mapData[player.y + 1][player.x];
         }
         return data;
     }
@@ -107,5 +99,58 @@ public class Map {
 
     public String getMapName() {
         return mapName;
+    }
+
+
+    public List<Tile> getAllTiles() {
+        List<Tile> tileList = new ArrayList<>();
+        new Looper(mapData) {
+            @Override
+            public void loop(int x, int y, int data) {
+                Tile tile = new Tile(x, y, data);
+                if (tile.haveCollision())
+                    tileList.add(tile);
+            }
+        };
+        return tileList;
+    }
+
+    public List<Node> getAllNodes() {
+        List<Node> nodes = new ArrayList<>();
+        for (Tile tile : getAllTiles()) {
+            nodes.add(tile.getNodes()[0]);
+            nodes.add(tile.getNodes()[1]);
+            nodes.add(tile.getNodes()[2]);
+            nodes.add(tile.getNodes()[3]);
+        }
+        return nodes;
+    }
+
+    public List<Node> getAllFloorNodes() {
+        List<Node> nodes = new ArrayList<>();
+        new Looper(mapData) {
+            @Override
+            public void loop(int x, int y, int data) {
+                Tile tile = new Tile(x, y, data);
+                if (tile.getGround() != null) {
+                    nodes.add(tile.getNodes()[0]);
+                    nodes.add(tile.getNodes()[1]);
+                    nodes.add(tile.getNodes()[2]);
+                    nodes.add(tile.getNodes()[3]);
+
+                }
+            }
+        };
+        return nodes;
+    }
+
+    public Tile getAssociatedTile(Node node) {
+        for (Tile tile : getAllTiles()) {
+            for (Node n : tile.getNodes()) {
+                if (n.equals(node))
+                    return tile;
+            }
+        }
+        return null;
     }
 }

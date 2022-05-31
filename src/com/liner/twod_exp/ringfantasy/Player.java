@@ -1,12 +1,16 @@
 package com.liner.twod_exp.ringfantasy;
 
 
+import com.liner.twod_exp.engine.math.Vector2;
+
 import java.awt.image.BufferedImage;
 
 public class Player {
+    public Vector2 position = new Vector2();
     public int x;
     public int y;
     public int direction;
+    public double angle = -90;
     public BufferedImage[] playerImages;
 
     public String name = "Elvin";
@@ -33,6 +37,7 @@ public class Player {
 
 
     public Player(int x, int y, int direction) {
+        this.position = new Vector2(x, y).multiply(RingRender.tileSize).add(8,8);
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -41,14 +46,33 @@ public class Player {
         update();
     }
 
-    public void update(){
+    public void addAngle(double angle){
+        this.angle += angle;
+    }
+
+    public void addPosition(int x, int y){
+        this.position = position.add(x, y);
+    }
+
+    public void addPosition(Vector2 vector2){
+        this.position = position.add(vector2);
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
+
+    public void update() {
         level = GetHeroLevel();
         nextLevelXP = GetNextLevelExp();
         maxHP = GetHeroMaxHP();
         maxMP = GetHeroMaxMP();
         attack = GetHeroATT() * 10000;
-        defence= GetHeroDEF();
+        defence = GetHeroDEF();
         strength = GetHeroSTR();
+
+
+       // position = new Vector2(x, y).multiply(RingRender.tileSize).add(8);
     }
 
     private int GetHeroLevel() {
@@ -111,8 +135,6 @@ public class Player {
         }
         return i;
     }
-
-
 
 
 //

@@ -2,6 +2,7 @@ package com.liner.twod_exp.engine.math;
 
 
 import java.awt.geom.Line2D;
+import java.util.Objects;
 
 public class Node {
     public Vector2 point1, point2;
@@ -48,7 +49,7 @@ public class Node {
         return rotation;
     }
 
-    public double getLength(){
+    public double getLength() {
         return point1.distance(point2);
     }
 
@@ -72,15 +73,16 @@ public class Node {
         return getAngleBetween(point1, point2);
     }
 
-    public Line2D.Double getPath(){
+    public Line2D.Double getPath() {
         return new Line2D.Double(point1.x, point1.y, point2.x, point2.y);
     }
-    public Line2D.Double getScaledPath(int scaleFactor){
-        return new Line2D.Double(scaleFactor*point1.x, scaleFactor*point1.y,scaleFactor* point2.x, scaleFactor*point2.y);
+
+    public Line2D.Double getScaledPath(int scaleFactor) {
+        return new Line2D.Double(scaleFactor * point1.x, scaleFactor * point1.y, scaleFactor * point2.x, scaleFactor * point2.y);
     }
 
-    public static Node getScaled(int scaleFactor, Node node){
-        return new Node(scaleFactor*node.point1.x, scaleFactor*node.point1.y,scaleFactor* node.point2.x, scaleFactor*node.point2.y);
+    public static Node getScaled(int scaleFactor, Node node) {
+        return new Node(scaleFactor * node.point1.x, scaleFactor * node.point1.y, scaleFactor * node.point2.x, scaleFactor * node.point2.y);
     }
 
     public void rotateLine(Vector2 origin, double angle, double offset, double length) {
@@ -89,5 +91,28 @@ public class Node {
         float lineY = (float) (origin.y + Math.sin(theta) * length);
         this.point1 = origin;
         this.point2 = new Vector2(lineX, lineY);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+
+        if (!Objects.equals(point1, node.point1)) return false;
+        return Objects.equals(point2, node.point2);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = point1 != null ? point1.hashCode() : 0;
+        result = 31 * result + (point2 != null ? point2.hashCode() : 0);
+        return result;
+    }
+
+    public Vector2 getClosest(Vector2 other) {
+        double distance = point1.distance(other);
+        return distance < point2.distance(other) ? point1 : point2;
     }
 }

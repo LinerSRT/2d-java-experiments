@@ -182,6 +182,11 @@ public class ECore implements IRender, KeyListener, MouseListener, MouseMotionLi
 
     }
 
+    public void setRGB(int x, int y, int rgb) {
+        graphics2D.setColor(new Color(rgb));
+        graphics2D.fillRect(x, y, 1, 1);
+    }
+
 
     public void drawCenterVerticalString(String text, Rectangle2D.Double rect) {
         FontMetrics metrics = graphics2D.getFontMetrics(graphics2D.getFont());
@@ -192,6 +197,10 @@ public class ECore implements IRender, KeyListener, MouseListener, MouseMotionLi
     @Override
     public void setColor(Color color) {
         graphics2D.setColor(color);
+    }
+
+    public void setColor(int color) {
+        graphics2D.setColor(new Color(color));
     }
 
     @Override
@@ -323,7 +332,7 @@ public class ECore implements IRender, KeyListener, MouseListener, MouseMotionLi
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
-        mousePressed[mouseEvent.getButton()] = true;
+        mousePressed[mouseEvent.getButton()] = false;
         for (InputListener inputListener : inputListeners)
             inputListener.mouseRelease(this, mouseEvent.getButton());
     }
@@ -380,6 +389,10 @@ public class ECore implements IRender, KeyListener, MouseListener, MouseMotionLi
 
     public boolean isKeyPressed(int keycode) {
         return keysPressed[keycode];
+    }
+
+    public boolean isMousePressed(int keycode) {
+        return mousePressed[keycode];
     }
 
 }

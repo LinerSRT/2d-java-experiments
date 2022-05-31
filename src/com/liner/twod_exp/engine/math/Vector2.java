@@ -1,5 +1,7 @@
 package com.liner.twod_exp.engine.math;
 
+import java.awt.geom.Point2D;
+
 public class Vector2 {
     public double x;
     public double y;
@@ -21,6 +23,49 @@ public class Vector2 {
         this.y = y;
     }
 
+    public double angle(Vector2 point) {
+        double xDistance = x - point.x;
+        double yDistance = y - point.y;
+        double angle = Math.toDegrees(Math.atan(yDistance / xDistance));
+        double rotation = xDistance > 0 ? angle - 180 : angle;
+        if (Math.abs(angle) == 90)
+            return -angle;
+        return rotation;
+    }
+
+    public int directionInt(Vector2 vector2) {
+        double angle = angle(vector2);
+        if (angle < 45 && angle > -45) {
+            return 1;
+        } else if (angle < -45 && angle > -135) {
+            return 0;
+        } else if (angle < -135 && angle > -225) {
+            return 3;
+        } else {
+            return 2;
+        }
+    }
+
+    public Vector2 direction(double angle, double length) {
+        double theta = Math.toRadians(angle);
+        float dx = (float) (x + Math.cos(theta) * length);
+        float dy = (float) (y + Math.sin(theta) * length);
+        return new Vector2(dx, dy);
+    }
+
+    public void set(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
     public double getX() {
         return this.x;
     }
@@ -38,7 +83,7 @@ public class Vector2 {
     }
 
     public Vector2 add(double x) {
-        return this.add(x, 0);
+        return this.add(x, x);
     }
 
     public Vector2 add(double x, double y) {
@@ -125,6 +170,7 @@ public class Vector2 {
         return new Vector2(0, 0);
     }
 
+
     public double dot(Vector2 v) {
         return this.x * v.x + this.y * v.y;
     }
@@ -140,5 +186,31 @@ public class Vector2 {
     @Override
     public String toString() {
         return "Vector2(x=" + this.x + ",y=" + this.y + ")";
+    }
+
+    public Point2D.Double toPoint() {
+        return new Point2D.Double(x, y);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Vector2 vector2 = (Vector2) o;
+
+        if (Double.compare(vector2.x, x) != 0) return false;
+        return Double.compare(vector2.y, y) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(x);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

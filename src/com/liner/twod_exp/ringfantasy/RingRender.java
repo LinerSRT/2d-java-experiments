@@ -3,6 +3,8 @@ package com.liner.twod_exp.ringfantasy;
 import com.liner.twod_exp.engine.core.ECore;
 import com.liner.twod_exp.engine.core.InputListener;
 import com.liner.twod_exp.engine.core.Renderer;
+import com.liner.twod_exp.engine.math.Node;
+import com.liner.twod_exp.engine.math.Vector2;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -33,17 +35,19 @@ public class RingRender extends Renderer implements InputListener, Context {
     private Battle battle;
     private final Random random;
 
+    @Override
+    public void create() {
 
+    }
 
     public RingRender() {
-        super(RingRender.class.getSimpleName());
         this.random = new Random();
         this.inventory = new ArrayList<>();
         mapList = new ArrayList<>();
         for (String mapName : mapNameList)
             mapList.add(new Map(mapName));
-        loadMap("MapN1,6,24,40");
-        // loadMap(Resource.eventList.get(0).data);
+        //loadMap("MapN1,6,24,40");
+        loadMap(Resource.eventList.get(0).data);
     }
 
 
@@ -92,7 +96,18 @@ public class RingRender extends Renderer implements InputListener, Context {
 
     @Override
     public void tick(ECore eCore, long frameTime) {
-
+        if (eCore.isKeyPressed(KeyEvent.VK_Q)) {
+            player.addAngle(-3);
+        }
+        if (eCore.isKeyPressed(KeyEvent.VK_E)) {
+            player.addAngle(3);
+        }
+        if (eCore.isKeyPressed(KeyEvent.VK_W)) {
+            float x = (float) (player.x + Math.cos(player.angle) * 2);
+            float y = (float) (player.y + Math.sin(player.angle) * 2);
+            player.setPosition(new Vector2(x, y));
+        }
+        player.update();
     }
 
     private boolean playerCanMove(int x, int y) {
@@ -116,69 +131,6 @@ public class RingRender extends Renderer implements InputListener, Context {
         } else return objectID <= 1 || objectID == 44;
     }
 
-//
-////    @Override
-//    public void onExecuted(Command command) {
-//        executedCommand = command;
-//        if (command.equals(okCommand)) {
-//            removeCommand(okCommand);
-//            if (ingameEvent != 101)
-//                removeCommand(cancelCommand);
-//            if (ingameEvent == 102) {
-//
-//            }
-//            if (ingameEvent == 103) {
-//                ingameEvent = 0;
-//                //TODO Shop menu
-//                return;
-//            }
-//            if (ingameEvent == 104) {
-//                player.key--;
-//                map.setDataAt(map.getDataAt(player.x, player.y) % 10000, player.x, player.y);
-//            }
-//            if (ingameEvent == 105) {
-//                ingameEvent = 0;
-//                //TODO start battle
-////                mapCanvas.addCommand(CommandMenu);
-////                mapCanvas.addCommand(CommandSys);
-////                bc.StartBattle(mapCanvas._fld011D, mapCanvas._fld011E, mapCanvas._fld011F, mapCanvas._fld0120);
-////                if (mapCanvas._fld011D == 14) {
-////                    TextFileInfo(bc, "King Lionel", "king1.txt");
-////                } else {
-////                    display.setCurrent(bc);
-////                }
-//            } else if (ingameEvent == 106) {
-//                ingameEvent = 7;
-//                messageText = "Do you like to accept this quest?";
-//            } else if (ingameEvent == 107) {
-//                map.setDataAt((map.getDataAt(player.x, player.y) % 10000) + 810000, player.x, player.y);
-//                ingameEvent = 0;
-//            } else if (ingameEvent == 108) {
-//                map.setDataAt(960022, player.x, player.y);
-//                ingameEvent = 0;
-//            } else if (ingameEvent == 109) {
-//                ingameEvent = 1;
-//                switch (this.bartenderSpech) {
-//                    case 0 -> messageText = "Bartender: \\n You need to EQUIP swords, armors and rings before use them.";
-//                    case 1 -> messageText = "Bartender: \\n Use the treasure KEY carefully, because it just can be used once.";
-//                    case 2 -> messageText = "Bartender: \\n Some monsters are very weak to FIRE or ICE spells, so cast the spells wisely.";
-//                    case 3 -> messageText = "Bartender: \\n Check your STATUS from time to time, and make sure you are in the good condition.";
-//                    case 4 -> messageText = "Bartender: \\n Use the RAINBOW OIL(s) will temporarily increase your attack power.";
-//                    case 5 -> messageText = "Bartender: \\n Cast the SUMMON spell(s) will temporarily increase your spell power.";
-//                    case 6 -> messageText = "Bartender: \\n There lots of HIDDEN treasures on this land, so find them carefully.";
-//                    case 7 -> messageText = "Bartender: \\n Talk to the QUEEN. You may be the person she needs.";
-//                }
-//                this.bartenderSpech++;
-//                if (this.bartenderSpech > 7) {
-//                    this.bartenderSpech = 0;
-//                }
-//            } else {
-//                ingameEvent = 0;
-//            }
-//
-//        }
-//        executedCommand = null;
-//    }
 
     @Override
     public void keyPress(ECore core, int keyCode) {
@@ -188,7 +140,6 @@ public class RingRender extends Renderer implements InputListener, Context {
         if (keyCode == KeyEvent.VK_R) {
             Resource.reloadResources();
         }
-        player.update();
         event = null;
         if (message != null && message.isShowing()) {
             message.keyEvent(keyCode);
@@ -198,6 +149,7 @@ public class RingRender extends Renderer implements InputListener, Context {
             battle.keyEvent(keyCode);
         } else {
             if (keyCode == KeyEvent.VK_UP && player.y > 0) {
+                player.angle = 270;
                 if (player.direction != 0) {
                     player.direction = 0;
                 } else {
@@ -208,6 +160,7 @@ public class RingRender extends Renderer implements InputListener, Context {
                     }
                 }
             } else if (keyCode == KeyEvent.VK_DOWN && player.y < currentMap.getMapHeight() - 1) {
+                player.angle = 90;
                 if (player.direction != 3) {
                     player.direction = 3;
                 } else {
@@ -218,6 +171,7 @@ public class RingRender extends Renderer implements InputListener, Context {
                     }
                 }
             } else if (keyCode == KeyEvent.VK_LEFT && player.x > 0) {
+                player.angle = 180;
                 if (player.direction != 1) {
                     player.direction = 1;
                 } else {
@@ -228,6 +182,7 @@ public class RingRender extends Renderer implements InputListener, Context {
                     }
                 }
             } else if (keyCode == KeyEvent.VK_RIGHT && player.x < currentMap.getMapWidth() - 1) {
+                player.angle = 0;
                 if (player.direction != 2) {
                     player.direction = 2;
                 } else {
@@ -342,7 +297,7 @@ public class RingRender extends Renderer implements InputListener, Context {
                         break;
                     case 7:
                         int monsterData = Resource.getInt(event.data, 1);
-                        System.out.println(currentMap.getData(player) + "| "+monsterData);
+                        System.out.println(currentMap.getData(player) + "| " + monsterData);
                         int mapIndex = getMapIndex(currentMapName);
                         question = new Question(String.format("Fight with %s, HP:%s", Resource.monsters[monsterData].name, Resource.monsters[monsterData].hp), 0, hud.getHeight()) {
                             @Override
@@ -441,6 +396,16 @@ public class RingRender extends Renderer implements InputListener, Context {
                 System.out.println(event);
             }
         }
+    }
+
+    @Override
+    public int getWindowWidth() {
+        return 0;
+    }
+
+    @Override
+    public int getWindowHeight() {
+        return 0;
     }
 
     private Map getMap(String mapName) {
